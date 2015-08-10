@@ -48,15 +48,15 @@ let behaviourColourArray: [UIColor] =
 let behaviourOrbitColourArray: [UIColor] =
 [
     UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 1),
-    UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 0.4),
+    UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 0.2),
     UIColor(red: 203/255.0, green: 191/255.0, blue: 171/255.0, alpha: 1),
     UIColor(red: 203/255.0, green: 191/255.0, blue: 171/255.0, alpha: 0.2),
     UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 1),
-    UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 0.4),
+    UIColor(red: 210/255.0, green: 99/255.0, blue: 89/255.0, alpha: 0.2),
     UIColor(red: 203/255.0, green: 191/255.0, blue: 171/255.0, alpha: 1),
-    UIColor(red: 203/255.0, green: 191/255.0, blue: 241/255.0, alpha: 0.2)]
+    UIColor(red: 203/255.0, green: 191/255.0, blue: 171/255.0, alpha: 0.2)]
 
-let backgroundMainColour = UIColor(red: 241/255.0, green: 238/255.0, blue: 219/255.0, alpha: 1)
+let backgroundMainColour = UIColor(red: 241/255.0, green: 238/255.0, blue: 229/255.0, alpha: 1)
 let behaviourColour = UIColor(red: 255/255.0, green: 176/255.0, blue: 59/255.0, alpha: 1)
 let bahaviourBackgroundColour = UIColor(red: 255/255.0, green: 240/255.0, blue: 165/255.0, alpha: 1)
 let utilityColour = UIColor(red: 182/255.0, green: 73/255.0, blue: 38/255.0, alpha: 1)
