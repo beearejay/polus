@@ -4,11 +4,10 @@
 //
 //  Created by Blake Johnston II on 24/06/15.
 //  Copyright (c) 2015 beearejay. All rights reserved.
-//
+//  New
 
 import UIKit
 
-@IBDesignable
 class BehaviourOrbitView: UIView {
     
     var id = 0 {
@@ -16,7 +15,7 @@ class BehaviourOrbitView: UIView {
             //self.backgroundColor = behaviourColourArray[(id*2) + 1]
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
@@ -36,7 +35,6 @@ class BehaviourOrbitView: UIView {
         var locations: [CGFloat] = [0.0, 0.9]
         var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
         var relativeCenter = CGPointMake(frame.width/2, frame.height/2)
-        //CGContextDrawRadialGradient(<#context: CGContext!#>, gradient: CGGradient!, <#startCenter: CGPoint#>, <#startRadius: CGFloat#>, <#endCenter: CGPoint#>, //, <#options: CGGradientDrawingOptions#>)
         CGContextDrawRadialGradient(context, gradient, relativeCenter, CGFloat(circleDiameter/2.2), relativeCenter, CGFloat(self.frame.width/1.7), CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation))
         
         self.layer.cornerRadius = frame.height/2

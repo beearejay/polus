@@ -239,23 +239,44 @@ class ViewController: UIViewController {
     
     func resetButtonTouch(sender: UIButton!) {
         for behaviourView in behavioursViewArray{
-            behaviourView.center.x = originalBehaviourPosition[behaviourView.id].0
-            behaviourView.center.y = originalBehaviourPosition[behaviourView.id].1
             var localOrbit = behaviourOrbitViewArray[behaviourView.id]
-            localOrbit.frame.size.width = circleDiameter*1.8
-            localOrbit.frame.size.height = circleDiameter*1.8
-            localOrbit.center = behaviourView.center
-            localOrbit.setNeedsDisplay()
+            UIView.animateWithDuration(1.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                behaviourView.center.x = originalBehaviourPosition[behaviourView.id].0
+                behaviourView.center.y = originalBehaviourPosition[behaviourView.id].1
+                localOrbit.frame.size.width = circleDiameter*1.8
+                localOrbit.frame.size.height = circleDiameter*1.8
+                localOrbit.center = behaviourView.center
+                self.updateDisplayOfViews()
+                }, completion:{
+                    finished in
+                    self.updateDisplayOfViews()
+                    println("Complete")
+                }
+            )
         }
         
         for instrumentView in instrumentViewArray{
+            UIView.animateWithDuration(1.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
             instrumentView.center.x = originalInstrumentPosition[instrumentView.id].0
             instrumentView.center.y = originalInstrumentPosition[instrumentView.id].1
+                }, completion: nil)
         }
         
         calculate.updatePositionsOfViews()
         calculate.calculateDistanceVectors()
         calculate.calculateOrbitOverlapsWithInstruments()
+    }
+    
+    func updateDisplayOfViews(){
+        for behaviourView in behavioursViewArray{
+            var localOrbit = behaviourOrbitViewArray[behaviourView.id]
+            behaviourView.setNeedsDisplay()
+            localOrbit.setNeedsDisplay()
+        }
+        
+        for instrumentView in instrumentViewArray{
+            instrumentView.setNeedsDisplay()
+        }
     }
 }
 
