@@ -12,6 +12,7 @@
 		25CDFB4A1B38F9B000BAB01C /* libVVOSC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25CDFB3A1B38F91F00BAB01C /* libVVOSC.a */; };
 		25CDFB501B39088200BAB01C /* DistanceCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CDFB4F1B39088200BAB01C /* DistanceCalculations.swift */; };
 		25CDFB521B390BA700BAB01C /* OSCHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CDFB511B390BA700BAB01C /* OSCHandler.swift */; };
+		25CFFF251B797C7200E070BF /* FirstScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25CFFF241B797C7200E070BF /* FirstScreenViewController.swift */; };
 		25DB30971AFAC57600F6626E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DB30961AFAC57600F6626E /* AppDelegate.swift */; };
 		25DB30991AFAC57600F6626E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25DB30981AFAC57600F6626E /* ViewController.swift */; };
 		25DB309C1AFAC57600F6626E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25DB309A1AFAC57600F6626E /* Main.storyboard */; };
@@ -199,6 +200,7 @@
 		25CDFB4B1B38FA6700BAB01C /* Polus Ensemble iPad App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Polus Ensemble iPad App-Bridging-Header.h"; sourceTree = "<group>"; };
 		25CDFB4F1B39088200BAB01C /* DistanceCalculations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistanceCalculations.swift; sourceTree = "<group>"; };
 		25CDFB511B390BA700BAB01C /* OSCHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSCHandler.swift; sourceTree = "<group>"; };
+		25CFFF241B797C7200E070BF /* FirstScreenViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstScreenViewController.swift; sourceTree = "<group>"; };
 		25DB30911AFAC57600F6626E /* Polus Ensemble iPad App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Polus Ensemble iPad App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		25DB30951AFAC57600F6626E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25DB30961AFAC57600F6626E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				25DB30981AFAC57600F6626E /* ViewController.swift */,
+				25CFFF241B797C7200E070BF /* FirstScreenViewController.swift */,
 				2507E1EC1B3A5209003509D2 /* BehaviourOrbitView.swift */,
 				25DB30B81AFADEC500F6626E /* behavioursView.swift */,
 				25DB30B61AFAC65C00F6626E /* instrumentView.swift */,
@@ -591,6 +594,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				25CDFB501B39088200BAB01C /* DistanceCalculations.swift in Sources */,
+				25CFFF251B797C7200E070BF /* FirstScreenViewController.swift in Sources */,
 				25DB30991AFAC57600F6626E /* ViewController.swift in Sources */,
 				25DB30B71AFAC65C00F6626E /* instrumentView.swift in Sources */,
 				25DB30B91AFADEC500F6626E /* behavioursView.swift in Sources */,

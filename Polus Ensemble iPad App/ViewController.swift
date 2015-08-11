@@ -86,8 +86,6 @@ class ViewController: UIViewController {
         for index in 0...(numberOfRelations-1){
             orbitPercentageInsideAndStatus.append(0.0, false)
         }
-        
-        
     }
 
     override func didReceiveMemoryWarning() {
