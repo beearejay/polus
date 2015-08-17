@@ -10,27 +10,28 @@ import UIKit
 
 class FirstScreenViewController: UIViewController {
     
-    var ip: String = ""
-    var port: Int = 0
+    var ip: String = "169.254.211.53"
+    var port: Int = 12000
     var delegate: ParseIpAndPort?
     var mainScreenController = ViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = backgroundMainColour
-        self.navigationController!.navigationBarHidden = false
+        //self.navigationController!.navigationBarHidden = false
         delegate?.updatePort(port)
         delegate?.updateIp(ip)
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    override func viewWillDisappear(animated: Bool) {
+        //self.navigationController!.navigationBarHidden = true
+        delegate?.updatePort(portField.text.toInt()!)
+        delegate?.updateIp(ipAddressField.text)
     }
     
-    @IBAction func connectButton() {
-        delegate?.updateIp(ipAddressField.text)
-        delegate?.updatePort(portField.text.toInt()!)
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
     @IBOutlet weak var ipAddressField: UITextField!

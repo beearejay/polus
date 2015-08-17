@@ -12,15 +12,21 @@ class OSCHandler{
     
     var newManager = OSCManager()
     var newOutPort = OSCOutPort()
-    var ip: String = ""
-    var port: Int = 0 {
+    
+    var ip: String = "169.254.211.53" {
         didSet{
-            println("DELAGATION")
+            setup()
+        }
+    }
+    var port: Int32 = 12000 {
+        didSet{
+            setup()
         }
     }
     
     func setup(){
-        newOutPort = newManager.createNewOutputToAddress("127.0.0.1", atPort: 12000)
+        //newManager.removeAllOutputs()
+        newOutPort = newManager.createNewOutputToAddress(ip, atPort: port)
     }
     
     func sendOSC(id: String, distance: Float, index: Int32){

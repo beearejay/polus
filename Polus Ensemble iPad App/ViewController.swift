@@ -80,9 +80,8 @@ class ViewController: UIViewController, ParseIpAndPort {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        println("are we printint")
         self.view.backgroundColor = backgroundMainColour
-        self.navigationController!.navigationBarHidden = true
+        //self.navigationController!.navigationBarHidden = true
         let numberOfRelations = numberOfInstruments*numberOfBehaviours
         distanceVectors = [Double](count: numberOfRelations, repeatedValue: 0.0)
         //Set reset
@@ -101,8 +100,8 @@ class ViewController: UIViewController, ParseIpAndPort {
         setup = true
         var calculate = DistanceCalculations()
         calculate.didThisWork()
+        oscHandler.setup()
         let configScreenViewController: UIViewController = FirstScreenViewController()
-        //configScreenViewController.modalTransitionStyle = UIModalPresentationStyle.Popover
     }
     
     override func didReceiveMemoryWarning() {
@@ -122,7 +121,7 @@ class ViewController: UIViewController, ParseIpAndPort {
     }
     
     func setUpConfigButton(){
-        config.frame = CGRectMake(16, 78, 68, 35)
+        config.frame = CGRectMake(self.view.frame.width - 84, 28, 68, 35)
         config.backgroundColor = UIColor(red: 43/255.0, green: 150/255.0, blue: 176/255.0, alpha: 1)
         config.layer.cornerRadius = 5.0
         config.layer.masksToBounds = true
@@ -134,13 +133,11 @@ class ViewController: UIViewController, ParseIpAndPort {
     }
     
     func updateIp(ip: String){
-        //oscHandler.ip = delegate!.updateIp()
-        println("DELATSFSFASDEQ \(ip)")
+        oscHandler.ip = ip
     }
     
     func updatePort(port: Int){
-        //oscHandler.port = delegate!.updatePort()
-        println("DELATSFSFASDEQ \(port)")
+        oscHandler.port = Int32(port)
     }
     
     func initialiseInstruments(){
@@ -271,7 +268,6 @@ class ViewController: UIViewController, ParseIpAndPort {
         localOrbit.setNeedsDisplay()
         updateSizeOfOrbits()
         calculateOrbitOverlapsWithInstruments()
-        calculateOrbitOverlapsWithInstruments()
     }
     
     func resetButtonTouch(sender: UIButton!) {
@@ -300,6 +296,7 @@ class ViewController: UIViewController, ParseIpAndPort {
         }
         
         updatePositionsOfViews()
+        updateSizeOfOrbits()
         calculateDistanceVectors()
         calculateOrbitOverlapsWithInstruments()
     }
@@ -313,6 +310,10 @@ class ViewController: UIViewController, ParseIpAndPort {
          let configController = segue.destinationViewController as! FirstScreenViewController
             configController.delegate = self
         }
+    }
+    
+    @IBAction func unwindToViewController (sender: UIStoryboardSegue){
+        
     }
     
     func updateDisplayOfViews(){
