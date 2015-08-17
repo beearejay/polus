@@ -15,7 +15,7 @@ class InstrumentView: UIView {
     
     var id = 0 {
         didSet {
-            self.layer.backgroundColor = instrumentColoutArray[id].CGColor
+            self.layer.backgroundColor = instrumentColour.CGColor
          idLabel.text = String(id + 1)
         }
     }
