@@ -8,24 +8,6 @@
 
 import UIKit
 
-let numberOfInstruments = 6
-let numberOfBehaviours = 4
-let numberOfRelations = numberOfInstruments*numberOfBehaviours
-var circleDiameter:CGFloat = 150
-var instrumentSize:CGFloat = 100
-
-public var positionsOfBehavioursViews: [(Double,Double)] = []
-public var positionsOfInstrumentViews: [(Double,Double)] = []
-public var distanceVectors = [Double](count: numberOfRelations, repeatedValue: 0.0)
-
-var instrumentViewArray:[InstrumentView] = []
-var behavioursViewArray:[BehavioursView] = []
-var behaviourOrbitViewArray:[BehaviourOrbitView] = []
-var behaviourOrbitSizeArray: [Double] = []
-var orbitPercentageInsideAndStatus: [(Double, Bool)] = []
-var originalBehaviourPosition: [(CGFloat, CGFloat)] = []
-var originalInstrumentPosition: [(CGFloat, CGFloat)] = []
-
 //Colour Pallatte
 let instrumentColoutArray: [UIColor] =
 [   UIColor(red: 43/255.0, green: 150/255.0, blue: 176/255.0, alpha: 1),
@@ -61,39 +43,73 @@ let behaviourColour = UIColor(red: 255/255.0, green: 176/255.0, blue: 59/255.0, 
 let bahaviourBackgroundColour = UIColor(red: 255/255.0, green: 240/255.0, blue: 165/255.0, alpha: 1)
 let utilityColour = UIColor(red: 182/255.0, green: 73/255.0, blue: 38/255.0, alpha: 1)
 
+protocol ParseIpAndPort {
+    func updateIp(ip: String)
+    func updatePort(port: Int)
+}
 
-class ViewController: UIViewController {
+
+class ViewController: UIViewController, ParseIpAndPort {
     
-    var calculate = DistanceCalculations()
+    
+    var oscHandler = OSCHandler()
+    var numberOfInstruments = 6
+    var numberOfBehaviours = 4
+    var circleDiameter:CGFloat = 150
+    var instrumentSize:CGFloat = 100
+    var setup:Bool = false
+    
+    var positionsOfBehavioursViews: [(Double,Double)] = []
+    var positionsOfInstrumentViews: [(Double,Double)] = []
+    
+    var instrumentViewArray:[InstrumentView] = []
+    var behavioursViewArray:[BehavioursView] = []
+    var behaviourOrbitViewArray:[BehaviourOrbitView] = []
+    var behaviourOrbitSizeArray: [Double] = []
+    var orbitPercentageInsideAndStatus: [(Double, Bool)] = []
+    var originalBehaviourPosition: [(CGFloat, CGFloat)] = []
+    var originalInstrumentPosition: [(CGFloat, CGFloat)] = []
+    var distanceVectors: [Double] = []
+    
     var width: CGFloat = 0.0
     var height: CGFloat = 0.0
+    
     var reset = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+    var config = UIButton.buttonWithType(UIButtonType.System) as! UIButton
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        self.view.backgroundColor = backgroundMainColour
         
+        super.viewDidLoad()
+        println("are we printint")
+        self.view.backgroundColor = backgroundMainColour
+        self.navigationController!.navigationBarHidden = true
+        let numberOfRelations = numberOfInstruments*numberOfBehaviours
+        distanceVectors = [Double](count: numberOfRelations, repeatedValue: 0.0)
         //Set reset
         setUpResetButton()
+        setUpConfigButton()
         //Set frame size
         width = UIScreen.mainScreen().bounds.width
         height = UIScreen.mainScreen().bounds.height
         
-        calculate.setup()
         initialiseBehaviours()
         initialiseOrbits()
         initialiseInstruments()
         for index in 0...(numberOfRelations-1){
-            orbitPercentageInsideAndStatus.append(0.0, false)
-        }
+                orbitPercentageInsideAndStatus.append(0.0, false)
+            }
+        setup = true
+        var calculate = DistanceCalculations()
+        calculate.didThisWork()
+        let configScreenViewController: UIViewController = FirstScreenViewController()
+        //configScreenViewController.modalTransitionStyle = UIModalPresentationStyle.Popover
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     func setUpResetButton(){
-        
         reset.frame = CGRectMake(16, 28, 68, 35)
         reset.backgroundColor = UIColor(red: 43/255.0, green: 150/255.0, blue: 176/255.0, alpha: 1)
         reset.layer.cornerRadius = 5.0
@@ -103,6 +119,28 @@ class ViewController: UIViewController {
         reset.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         reset.addTarget(self, action: "resetButtonTouch:", forControlEvents: UIControlEvents.TouchUpInside)
         self.view.addSubview(reset)
+    }
+    
+    func setUpConfigButton(){
+        config.frame = CGRectMake(16, 78, 68, 35)
+        config.backgroundColor = UIColor(red: 43/255.0, green: 150/255.0, blue: 176/255.0, alpha: 1)
+        config.layer.cornerRadius = 5.0
+        config.layer.masksToBounds = true
+        config.setTitle("Config", forState: UIControlState.Normal)
+        config.titleLabel!.font = UIFont(name: "Avenir", size: 22)
+        config.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        config.addTarget(self, action: "prepareSegueToConfig:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.view.addSubview(config)
+    }
+    
+    func updateIp(ip: String){
+        //oscHandler.ip = delegate!.updateIp()
+        println("DELATSFSFASDEQ \(ip)")
+    }
+    
+    func updatePort(port: Int){
+        //oscHandler.port = delegate!.updatePort()
+        println("DELATSFSFASDEQ \(port)")
     }
     
     func initialiseInstruments(){
@@ -159,6 +197,7 @@ class ViewController: UIViewController {
             newOrbitView.id = behaviourView.id
             behaviourOrbitSizeArray.append(Double(behaviourView.frame.width))
             newOrbitView.center = behaviourView.center
+            newOrbitView.innerCircleDiameter = circleDiameter
             behaviourOrbitViewArray.append(newOrbitView)
             view.insertSubview(newOrbitView, atIndex: behavioursViewArray.count-2)
         }
@@ -171,9 +210,9 @@ class ViewController: UIViewController {
         if let view = recognizer.view{
             view.center = CGPoint(x: view.center.x + translation.x, y: view.center.y + translation.y)
         }
-        calculate.updatePositionsOfViews()
-        calculate.calculateDistanceVectors()
-        calculate.calculateOrbitOverlapsWithInstruments()
+        updatePositionsOfViews()
+        calculateDistanceVectors()
+        calculateOrbitOverlapsWithInstruments()
         recognizer.setTranslation(CGPointZero, inView: self.view)
     }
     
@@ -186,9 +225,9 @@ class ViewController: UIViewController {
         localOrbit.center = CGPoint(x: localOrbit.center.x + translation.x, y: localOrbit.center.y + translation.y)
         self.view.bringSubviewToFront(localBehaviour)
         self.view.bringSubviewToFront(reset)
-        calculate.updatePositionsOfViews()
-        calculate.calculateDistanceVectors()
-        calculate.calculateOrbitOverlapsWithInstruments()
+        updatePositionsOfViews()
+        calculateDistanceVectors()
+        calculateOrbitOverlapsWithInstruments()
         recognizer.setTranslation(CGPointZero, inView: self.view)
     }
     
@@ -205,8 +244,8 @@ class ViewController: UIViewController {
             localOrbit.drawRect(localBehaviour.frame)
             recognizer.scale = 1
             localOrbit.setNeedsDisplay()
-            calculate.updateSizeOfOrbits()
-            calculate.calculateOrbitOverlapsWithInstruments()
+            updateSizeOfOrbits()
+            calculateOrbitOverlapsWithInstruments()
         }
         else if (recognizer.scale <= 1.0){ //For at limits of size, but pinching in.
             var newWidth = localOrbit.frame.width*recognizer.scale
@@ -217,8 +256,8 @@ class ViewController: UIViewController {
             localOrbit.drawRect(localBehaviour.frame)
             recognizer.scale = 1
             localOrbit.setNeedsDisplay()
-            calculate.updateSizeOfOrbits()
-            calculate.calculateOrbitOverlapsWithInstruments()
+            updateSizeOfOrbits()
+            calculateOrbitOverlapsWithInstruments()
         }
     }
     
@@ -230,19 +269,19 @@ class ViewController: UIViewController {
         localOrbit.frame.size.height = circleDiameter*1.8
         localOrbit.center = localBehaviour.center
         localOrbit.setNeedsDisplay()
-        calculate.updateSizeOfOrbits()
-        calculate.calculateOrbitOverlapsWithInstruments()
-        calculate.calculateOrbitOverlapsWithInstruments()
+        updateSizeOfOrbits()
+        calculateOrbitOverlapsWithInstruments()
+        calculateOrbitOverlapsWithInstruments()
     }
     
     func resetButtonTouch(sender: UIButton!) {
         for behaviourView in behavioursViewArray{
             var localOrbit = behaviourOrbitViewArray[behaviourView.id]
             UIView.animateWithDuration(1.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                behaviourView.center.x = originalBehaviourPosition[behaviourView.id].0
-                behaviourView.center.y = originalBehaviourPosition[behaviourView.id].1
-                localOrbit.frame.size.width = circleDiameter*1.8
-                localOrbit.frame.size.height = circleDiameter*1.8
+                behaviourView.center.x = self.originalBehaviourPosition[behaviourView.id].0
+                behaviourView.center.y = self.originalBehaviourPosition[behaviourView.id].1
+                localOrbit.frame.size.width = self.circleDiameter*1.8
+                localOrbit.frame.size.height = self.circleDiameter*1.8
                 localOrbit.center = behaviourView.center
                 self.updateDisplayOfViews()
                 }, completion:{
@@ -255,14 +294,25 @@ class ViewController: UIViewController {
         
         for instrumentView in instrumentViewArray{
             UIView.animateWithDuration(1.5, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-            instrumentView.center.x = originalInstrumentPosition[instrumentView.id].0
-            instrumentView.center.y = originalInstrumentPosition[instrumentView.id].1
+            instrumentView.center.x = self.originalInstrumentPosition[instrumentView.id].0
+            instrumentView.center.y = self.originalInstrumentPosition[instrumentView.id].1
                 }, completion: nil)
         }
         
-        calculate.updatePositionsOfViews()
-        calculate.calculateDistanceVectors()
-        calculate.calculateOrbitOverlapsWithInstruments()
+        updatePositionsOfViews()
+        calculateDistanceVectors()
+        calculateOrbitOverlapsWithInstruments()
+    }
+    
+    func prepareSegueToConfig(sender: UIButton!) {
+        self.performSegueWithIdentifier("configSegue", sender: nil)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "configSegue"{
+         let configController = segue.destinationViewController as! FirstScreenViewController
+            configController.delegate = self
+        }
     }
     
     func updateDisplayOfViews(){
@@ -276,5 +326,65 @@ class ViewController: UIViewController {
             instrumentView.setNeedsDisplay()
         }
     }
+    
+    func updatePositionsOfViews(){
+        //enumerate here
+        for instrumentView in instrumentViewArray{
+            positionsOfInstrumentViews[instrumentView.id] = (Double(instrumentView.center.x), Double(instrumentView.center.y))
+            
+        }
+        
+        for behaviourView in behavioursViewArray{
+            positionsOfBehavioursViews[behaviourView.id] = (Double(behaviourView.center.x), Double(behaviourView.center.y))
+        }
+    }
+    
+    func calculateDistanceVectors(){
+        for var behaviourIndex = 0; behaviourIndex < positionsOfBehavioursViews.count; ++behaviourIndex{
+            for var instrumentIndex = 0; instrumentIndex < positionsOfInstrumentViews.count; ++instrumentIndex{
+                var behaviourPosition = positionsOfBehavioursViews[behaviourIndex]
+                var instumentPosition = positionsOfInstrumentViews[instrumentIndex]
+                var a = behaviourPosition.0 - instumentPosition.0
+                var b = behaviourPosition.1 - instumentPosition.1
+                var c = sqrt((a*a) + (b*b))
+                distanceVectors[instrumentIndex + (behaviourIndex * positionsOfInstrumentViews.count)] = c
+            }
+        }
+    }
+    
+    func updateSizeOfOrbits(){
+        for BehaviourOrbitView in behaviourOrbitViewArray{
+            behaviourOrbitSizeArray[BehaviourOrbitView.id] = Double(BehaviourOrbitView.frame.width) / 2.0
+        }
+    }
+    
+    func calculateOrbitOverlapsWithInstruments(){
+        for var behaviourIndex = 0; behaviourIndex < positionsOfBehavioursViews.count; ++behaviourIndex{
+            for var instrumentIndex = 0; instrumentIndex < positionsOfInstrumentViews.count; ++instrumentIndex{
+                var index = instrumentIndex + (behaviourIndex * positionsOfInstrumentViews.count)
+                var size = behaviourOrbitSizeArray[behaviourIndex]
+                var distance = distanceVectors[index]
+                if(size > distance){
+                    var percentage = distance/size
+                    orbitPercentageInsideAndStatus[index].0 = distance/size
+                    if(orbitPercentageInsideAndStatus[index].1 == false) //if its the first time in
+                    {
+                        oscHandler.sendOSC("NoteOn", distance: Float(percentage), index: Int32(index))
+                        orbitPercentageInsideAndStatus[index].1 = true
+                    }
+                    else //updater
+                    {
+                        oscHandler.sendOSC("NoteUpdate", distance: Float(percentage), index: Int32(index))
+                    }
+                }
+                else if(orbitPercentageInsideAndStatus[index].1 == true) //if we've just left
+                {
+                    oscHandler.sendOSC("NoteOff", index: Int32(index))
+                    orbitPercentageInsideAndStatus[index].1 = false
+                }
+            }
+        }
+    }
+
 }
 

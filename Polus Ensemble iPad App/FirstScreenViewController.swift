@@ -9,10 +9,19 @@
 import UIKit
 
 class FirstScreenViewController: UIViewController {
-
+    
+    var ip: String = ""
+    var port: Int = 0
+    var delegate: ParseIpAndPort?
+    var mainScreenController = ViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = backgroundMainColour
+        self.navigationController!.navigationBarHidden = false
+        delegate?.updatePort(port)
+        delegate?.updateIp(ip)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -20,6 +29,10 @@ class FirstScreenViewController: UIViewController {
     }
     
     @IBAction func connectButton() {
-        self.performSegueWithIdentifier("segueToMainScreen", sender: nil)
+        delegate?.updateIp(ipAddressField.text)
+        delegate?.updatePort(portField.text.toInt()!)
     }
+    
+    @IBOutlet weak var ipAddressField: UITextField!
+    @IBOutlet weak var portField: UITextField!
 }

@@ -12,6 +12,12 @@ class OSCHandler{
     
     var newManager = OSCManager()
     var newOutPort = OSCOutPort()
+    var ip: String = ""
+    var port: Int = 0 {
+        didSet{
+            println("DELAGATION")
+        }
+    }
     
     func setup(){
         newOutPort = newManager.createNewOutputToAddress("127.0.0.1", atPort: 12000)

@@ -16,13 +16,15 @@ class BehaviourOrbitView: UIView {
         }
     }
 
+    var innerCircleDiameter:CGFloat = 0.0
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clearColor()
         self.layer.cornerRadius = frame.height/2
         self.clipsToBounds = true
     }
-
+    
     
     required init(coder: NSCoder) {
         super.init(coder: coder)
@@ -36,7 +38,7 @@ class BehaviourOrbitView: UIView {
         var locations: [CGFloat] = [0.5, 1.0]
         var gradient = CGGradientCreateWithColors(colorSpace, colors, locations)
         var relativeCenter = CGPointMake(frame.width/2, frame.height/2)
-        CGContextDrawRadialGradient(context, gradient, relativeCenter, CGFloat(circleDiameter/6), relativeCenter, CGFloat(self.frame.width/2), CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation))
+        CGContextDrawRadialGradient(context, gradient, relativeCenter, CGFloat(innerCircleDiameter/6), relativeCenter, CGFloat(self.frame.width/2), CGGradientDrawingOptions(kCGGradientDrawsAfterEndLocation))
         
         self.layer.cornerRadius = frame.height/2
     }
