@@ -13,7 +13,7 @@ class OSCHandler{
     var newManager = OSCManager()
     var newOutPort = OSCOutPort()
     
-    var ip: String = "169.254.211.53" {
+    var ip: String = "169.254.242.134" {
         didSet{
             setup()
         }
@@ -32,7 +32,7 @@ class OSCHandler{
     func sendOSC(id: String, distance: Float, index: Int32){
         let newMsg: OSCMessage = OSCMessage(address: id)
         newMsg.addInt(index)
-        newMsg.addFloat(distance)
+        newMsg.addFloat(1.0 - distance)
         println("Sending On or Up id Tag is = \(id)" + "index is: \(index)")
         newOutPort.sendThisMessage(newMsg)
     }

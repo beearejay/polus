@@ -28,7 +28,7 @@ protocol ParseIpAndPort {
 class ViewController: UIViewController, ParseIpAndPort {
     
     var numberOfInstruments = 6
-    var numberOfBehaviours = 4
+    var numberOfBehaviours = 2
     var circleDiameter:CGFloat = 150
     var instrumentSize:CGFloat = 100
     

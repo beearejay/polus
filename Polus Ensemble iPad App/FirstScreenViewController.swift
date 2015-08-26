@@ -10,7 +10,7 @@ import UIKit
 
 class FirstScreenViewController: UIViewController {
     
-    var ip: String = "169.254.211.53"
+    var ip: String = "169.254.242.134"
     var port: Int = 12000
     var delegate: ParseIpAndPort?
     var mainScreenController = ViewController()
@@ -25,7 +25,7 @@ class FirstScreenViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        //self.navigationController!.navigationBarHidden = true
+        ip = ipAddressField.text
         delegate?.updatePort(portField.text.toInt()!)
         delegate?.updateIp(ipAddressField.text)
     }
